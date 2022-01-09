@@ -15,7 +15,7 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private var angle = 0f
-    //取得返回的影像資料
+
     override fun onActivityResult(requestCode: Int,
                                   resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -44,32 +44,32 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.btn_rotate).setOnClickListener {
             val imageView = findViewById<ImageView>(R.id.imageView)
-            angle += 90f //原本角度再加上 90 度
-            imageView.rotation = angle //使 ImageView 旋轉
-            val bitmap = imageView.drawToBitmap() //取得 Bitmap
-            recognizeImage(bitmap) //使用 Bitmap 進行辨識
+            angle += 90f
+            imageView.rotation = angle
+            val bitmap = imageView.drawToBitmap()
+            recognizeImage(bitmap)
         }
     }
-    //辨識圖像
+
     private fun recognizeImage(bitmap: Bitmap) {
         try {
-            //取得辨識標籤
+
             val labeler = ImageLabeling.getClient(
                     ImageLabelerOptions.DEFAULT_OPTIONS
             )
-            //建立 InputImage 物件
+
             val inputImage = InputImage.fromBitmap(bitmap, 0)
-            //匹配辨識標籤與圖像，並建立執行成功與失敗的監聽器
+
             labeler.process(inputImage)
                     .addOnSuccessListener { labels ->
-                        //取得辨識結果與可信度
+
                         val result = arrayListOf<String>()
                         for (label in labels) {
                             val text = label.text
                             val confidence = label.confidence
                             result.add("$text, 可信度：$confidence")
                         }
-                        //將結果顯示於 ListView
+ 
                         val listView = findViewById<ListView>(R.id.listView)
                         listView.adapter = ArrayAdapter(this,
                                 android.R.layout.simple_list_item_1,
